@@ -7,22 +7,26 @@ public class Blast{
     private double y;
     private double xVelocity;
     private double yVelocity;
-    private double damage;
+    private static double damage;
     private Color color;
     private int size;
+    private int speed;
 
-    public Blast(double x_in, double y_in, double xVel, double yVel, double dam, Color color_in, int size_in){
-        this.x = x_in;
-        this.y = y_in;
-        this.xVelocity = xVel;
-        this.yVelocity = yVel;
+    public Blast(double x_in, double y_in, double angle, double dam, Color color_in, int size_in, int speed_in){
+        this.size = size_in;
+        this.x = x_in - this.size / 2;
+        this.y = y_in - this.size / 2;
+        this.speed = speed_in;
+        this.xVelocity = Math.cos(angle)*this.speed;
+        this.yVelocity = Math.sin(angle)*this.speed;
         this.damage = dam;
         this.color = color_in;
-        this.size = size_in;
+        
     }
 
     public double getX(){return this.x;}
     public double getY(){return this.y;}
+    public int getSize(){return this.size;}
     public void setX(double in){this.x = in;}
     public void setY(double in){this.y = in;}
 

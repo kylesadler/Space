@@ -10,21 +10,30 @@ import java.util.Iterator;
 
 class Model{
     private PlayerShip player;
-    private ArrayList<Spaceship> enemies;
+    private ArrayList<EnemyShip> enemies;
     private ArrayList<Blast> blasts; // fired shots of type blast
 
     Model() throws IOException {
 		player = new PlayerShip(100, 100, 10);
-        enemies = new ArrayList<Spaceship>();
+        enemies = new ArrayList<EnemyShip>();
+        enemies.add(new EnemyShip(200, 200, 10));
         blasts = new ArrayList<Blast>();
-        blasts.add(new PrimaryBlast(100,100,1,1));
+        blasts.add(new PrimaryBlast(100,100,20));
     }
 
-    public void updateState(int w, int h){
+    public void updateState(){
         // player.updateState();
         // try{for (Spaceship a : enemies){
         //     a.updateState(w,h);
         // }}catch(Exception e){}
+        player.updateState();
+        for(Blast b : blasts){
+            b.updateState();
+        }
+
+        for(EnemyShip e : enemies){
+            e.updateState();
+        }
     }
 
     
@@ -32,6 +41,9 @@ class Model{
         player.draw(g);
         for(Blast b : blasts){
             b.updateImage(g);
+        }
+        for(EnemyShip e : enemies){
+            e.draw(g);
         }
         /*
         try{
@@ -61,9 +73,20 @@ class Model{
     public void setAngle(int x, int y){player.setAngle(x, y);//System.out.println(player.getAngle());
     }
     public void firePrimary(){
+        double error = player.getSize()*Math.sqrt(3)/6;
+        int x = (int) (player.getX() + Math.cos(player.getAngle())*(error + player.getSize()/5));
+        int y = (int) (player.getY() + Math.sin(player.getAngle())*(error + player.getSize()/5));
+        blasts.add(new PrimaryBlast(x,y,player.getAngle()));
         
     }
-    public void fireSecondary(){}
+    public void fireSecondary(){
+        
+        double error = player.getSize()*Math.sqrt(3)/6;
+        int x = (int) (player.getX() + Math.cos(player.getAngle())*(error + player.getSize()/5));
+        int y = (int) (player.getY() + Math.sin(player.getAngle())*(error + player.getSize()/5));
+        blasts.add(new SecondaryBlast(x,y,player.getAngle()));
+        
+    }
 
     public void moveRight(){player.moveRight();}
     public void moveLeft(){player.moveLeft();}
@@ -73,5 +96,8 @@ class Model{
     public void powerup1(){player.powerup1();}
     public void powerup2(){player.powerup2();}
 
+    public void pause(){
+        
+    }
 
 }

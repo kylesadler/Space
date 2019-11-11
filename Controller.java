@@ -26,21 +26,24 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
 
     public void update(Graphics g) {
         model.updateImage(g);
+        model.updateState();
     }
 
     public void mousePressed(MouseEvent e) {
         if (SwingUtilities.isLeftMouseButton(e)) {
             // player.firePrimary();
+            model.firePrimary();
             System.out.println("firePrimary");
   		} else if (SwingUtilities.isRightMouseButton(e))  {
               // model.fireSecondary();
+              model.fireSecondary();
               System.out.println("fire secondary");
 	    }
     }
 
     public void keyTyped(KeyEvent e) {
         if (e.getKeyChar() == 'p') {
-            //model.pause();// pause
+            model.pause(); // pause
 
         } else if (e.getKeyChar() == 'i') {
             // pause and instructions
@@ -57,30 +60,24 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
             System.out.println("powerup 2");
         } else if (e.getKeyChar() == 'w') {
             // move up
-            System.out.println("move up");
+            model.moveUp(); // System.out.println("move up");
         } else if (e.getKeyChar() == 'a') {
             // move left
-            System.out.println("move left");
+            model.moveLeft(); // System.out.println("move left");
         } else if (e.getKeyChar() == 's') {
             // move down
-            System.out.println("move down");
+            model.moveDown(); // System.out.println("move down");
         } else if (e.getKeyChar() == 'd') {
             // move right
-            System.out.println("move right");
+            model.moveRight(); // System.out.println("move right");
         }
     }
     public void mouseReleased (MouseEvent e) {}
     public void mouseEntered  (MouseEvent e) {}
     public void mouseExited   (MouseEvent e) {}
     public void mouseClicked  (MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) {
-        //System.out.println("Mouse moved "+e.getX()+", "+e.getY());
-        model.setAngle(e.getX(), e.getY());
-    }
-
-    public void mouseDragged(MouseEvent e) {
-        model.setAngle(e.getX(), e.getY());
-    }
+    public void mouseMoved(MouseEvent e) {model.setAngle(e.getX(), e.getY());}
+    public void mouseDragged(MouseEvent e) {model.setAngle(e.getX(), e.getY());}
 
 
     public static void main(String[] args) throws Exception {

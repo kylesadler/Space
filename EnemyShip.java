@@ -9,4 +9,5 @@ public class EnemyShip extends Spaceship{
     public EnemyShip(double x_in, double y_in, double angle_in){
         super(x_in, y_in, angle_in, ENEMY_MAX_HEALTH, ENEMY_MAX_SPEED, ENEMY_COLOR);
     }
+
 }
