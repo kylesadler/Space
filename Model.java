@@ -12,6 +12,7 @@ class Model{
     private PlayerShip player;
     private ArrayList<EnemyShip> enemies;
     private ArrayList<Blast> blasts; // fired shots of type blast
+    private boolean isPaused;
 
     Model() throws IOException {
 		player = new PlayerShip(100, 100, 10);
@@ -19,9 +20,13 @@ class Model{
         enemies.add(new EnemyShip(200, 200, 10));
         blasts = new ArrayList<Blast>();
         blasts.add(new PrimaryBlast(100,100,20));
+        this.isPaused = false;
     }
 
     public void updateState(){
+        if(this.isPaused){
+            return;
+        }
         // player.updateState();
         // try{for (Spaceship a : enemies){
         //     a.updateState(w,h);
@@ -38,6 +43,10 @@ class Model{
 
     
     public void updateImage(Graphics g) {
+        if(this.isPaused){
+            return;
+        }
+
         player.draw(g);
         for(Blast b : blasts){
             b.updateImage(g);
@@ -97,7 +106,7 @@ class Model{
     public void powerup2(){player.powerup2();}
 
     public void pause(){
-        
+        this.isPaused = true;
     }
 
 }
