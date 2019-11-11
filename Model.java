@@ -4,6 +4,8 @@ Programming Paradigms Assignment 5
 October 18th, 2019
 */
 import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,6 +15,7 @@ class Model{
     private ArrayList<EnemyShip> enemies;
     private ArrayList<Blast> blasts; // fired shots of type blast
     private boolean isPaused;
+    private boolean showingInstructions;
 
     Model() throws IOException {
 		player = new PlayerShip(100, 100, 10);
@@ -21,6 +24,7 @@ class Model{
         blasts = new ArrayList<Blast>();
         blasts.add(new PrimaryBlast(100,100,20));
         this.isPaused = false;
+        this.showingInstructions = false;
     }
 
     public void updateState(){
@@ -43,10 +47,9 @@ class Model{
 
     
     public void updateImage(Graphics g) {
-        if(this.isPaused){
-            return;
+        if(this.showingInstructions){
+            this.drawInstructions(g,10,535);
         }
-
         player.draw(g);
         for(Blast b : blasts){
             b.updateImage(g);
@@ -79,21 +82,29 @@ class Model{
         */
     }
 
-    public void setAngle(int x, int y){player.setAngle(x, y);//System.out.println(player.getAngle());
+    public void setAngle(int x, int y){if(this.isPaused){return;}player.setAngle(x, y);}
+
+    private int[] getCoords(){
+        int[] output = new int[2];
+        double error = player.getSize()*Math.sqrt(3)/6;
+        output[0] = (int) (player.getX() + Math.cos(player.getAngle())*(error + player.getSize()/5));
+        output[1] = (int) (player.getY() + Math.sin(player.getAngle())*(error + player.getSize()/5));
+        return output;
     }
     public void firePrimary(){
-        double error = player.getSize()*Math.sqrt(3)/6;
-        int x = (int) (player.getX() + Math.cos(player.getAngle())*(error + player.getSize()/5));
-        int y = (int) (player.getY() + Math.sin(player.getAngle())*(error + player.getSize()/5));
-        blasts.add(new PrimaryBlast(x,y,player.getAngle()));
+        if(this.isPaused){
+            return;
+        }
+        int[] coords = this.getCoords();
+        blasts.add(new PrimaryBlast(coords[0],coords[1],player.getAngle()));
         
     }
     public void fireSecondary(){
-        
-        double error = player.getSize()*Math.sqrt(3)/6;
-        int x = (int) (player.getX() + Math.cos(player.getAngle())*(error + player.getSize()/5));
-        int y = (int) (player.getY() + Math.sin(player.getAngle())*(error + player.getSize()/5));
-        blasts.add(new SecondaryBlast(x,y,player.getAngle()));
+        if(this.isPaused){
+            return;
+        }
+        int[] coords = this.getCoords();
+        blasts.add(new SecondaryBlast(coords[0],coords[1],player.getAngle()));
         
     }
 
@@ -102,11 +113,32 @@ class Model{
     public void moveUp(){player.moveUp();}
     public void moveDown(){player.moveDown();}
 
-    public void powerup1(){player.powerup1();}
-    public void powerup2(){player.powerup2();}
+    public void powerup1(){}
+    public void powerup2(){}
 
     public void pause(){
         this.isPaused = true;
+        // this.showingInstructions = true;
     }
 
+    public void instructions(){
+        this.showingInstructions = !this.showingInstructions;
+    }
+
+    public void resume(){
+        this.isPaused = false;
+    }
+
+    private void drawInstructions(Graphics g, int x, int y){
+        int spacing = 20;
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("Instructions:", x,y);
+        g.drawString("P to pause", x,y+spacing);
+        g.drawString("WASD to move", x,y+spacing*2);
+        g.drawString("Left click to fire lasers", x,y+spacing*3);
+        g.drawString("Right click to fire plasma bombs", x,y+spacing*4);
+        g.drawString("Q to activate powerup1", x,y+spacing*5);
+        g.drawString("E to activate powerup2", x,y+spacing*6);
+    }
 }

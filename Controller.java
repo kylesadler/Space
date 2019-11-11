@@ -33,24 +33,17 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
         if (SwingUtilities.isLeftMouseButton(e)) {
             // player.firePrimary();
             model.firePrimary();
-            System.out.println("firePrimary");
+            //System.out.println("firePrimary");
   		} else if (SwingUtilities.isRightMouseButton(e))  {
-              // model.fireSecondary();
-              model.fireSecondary();
-              System.out.println("fire secondary");
+            // model.fireSecondary();
+            model.fireSecondary();
+            //System.out.println("fire secondary");
 	    }
     }
 
-    public void keyTyped(KeyEvent e) {
-        if (e.getKeyChar() == 'p') {
-            model.pause(); // pause
+    public void mouseMoved(MouseEvent e) {model.setAngle(e.getX(), e.getY());}
+    public void mouseDragged(MouseEvent e) {model.setAngle(e.getX(), e.getY());}
 
-        } else if (e.getKeyChar() == 'i') {
-            // pause and instructions
-        }
-	}
-
-    public void keyReleased   (KeyEvent e){}
     public void keyPressed    (KeyEvent e){
         if (e.getKeyChar() == 'q') {
             // powerup 1
@@ -59,25 +52,28 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
             // powerup 2
             System.out.println("powerup 2");
         } else if (e.getKeyChar() == 'w') {
-            // move up
-            model.moveUp(); // System.out.println("move up");
+            model.moveUp(); 
         } else if (e.getKeyChar() == 'a') {
-            // move left
-            model.moveLeft(); // System.out.println("move left");
+            model.moveLeft();
         } else if (e.getKeyChar() == 's') {
-            // move down
-            model.moveDown(); // System.out.println("move down");
+            model.moveDown();
         } else if (e.getKeyChar() == 'd') {
-            // move right
-            model.moveRight(); // System.out.println("move right");
-        }
+            model.moveRight();
+        } else if (e.getKeyChar() == 'p') {
+            model.pause();
+        } else if (e.getKeyChar() == 'i') {
+            model.instructions();
+        }else if (e.getKeyCode() == 27) { // escape
+            model.resume();
+        } 
     }
+    public void keyTyped(KeyEvent e) {}
+    public void keyReleased   (KeyEvent e){}
     public void mouseReleased (MouseEvent e) {}
     public void mouseEntered  (MouseEvent e) {}
     public void mouseExited   (MouseEvent e) {}
     public void mouseClicked  (MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) {model.setAngle(e.getX(), e.getY());}
-    public void mouseDragged(MouseEvent e) {model.setAngle(e.getX(), e.getY());}
+    
 
 
     public static void main(String[] args) throws Exception {
