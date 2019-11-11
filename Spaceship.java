@@ -76,14 +76,8 @@ public class Spaceship{
 
     public void draw(Graphics g) {
 		g.setColor(this.color);
-
-        double t = Math.tan(angle);
-        int xPos = (int) (this.x+t);
-        int yPos = (int) this.y;
         
-        g.drawLine(xPos+3, yPos, xPos, yPos+3);
-        g.drawLine(xPos, yPos+3, xPos, yPos-3);
-        g.drawLine(xPos, yPos-3, xPos+3, yPos);
+        g.fillPolygon({1, 2, 3}, {1, 2, 3};, 3);
 	}
 
 	public void updateState(int w, int h) {
