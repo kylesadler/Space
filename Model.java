@@ -12,22 +12,27 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 class Model{
+
+    // private instance variables
     private PlayerShip player;
     private ArrayList<EnemyShip> enemies;
     private ArrayList<Blast> blasts; // fired shots of type blast
+    
+    // game state
     private boolean isPaused;
     private boolean showInstructions;
     private boolean showPauseMenu;
     private boolean gameIsOver;
     private boolean gameIsWon;
 
+    // window information
     private int height;
     private int width;
-
     private int absoluteX;
     private int absoluteY;
 
 
+    // constructor
     Model(int h, int w) throws IOException {
         this.height = h;
         this.width = w;
@@ -36,6 +41,8 @@ class Model{
 
         this.enemies = new ArrayList<EnemyShip>();
         this.blasts = new ArrayList<Blast>();
+        this.player = null;
+
         this.isPaused = false;
         this.showInstructions = false;
         this.showPauseMenu = false;
@@ -43,18 +50,8 @@ class Model{
         this.gameIsWon = false;
     }
 
-    protected void addPlayer(PlayerShip p){
-        this.player = p;
-    }
-
-    protected void addBlast(Blast b){
-        this.blasts.add(b);
-    }
-
-    protected void addEnemy(EnemyShip e){
-        this.enemies.add(e);
-    }
-
+    
+    // public methods
     public void updateState(){
         if(this.isPaused){return;}
         __updatePlayer();
@@ -69,22 +66,21 @@ class Model{
         }
         __removeOutOfBoundsBlasts();
     }
-
     
     public void updateImage(Graphics g) {
         if(this.gameIsOver){
             if(this.gameIsWon){
-                this.drawGameWon(g);
+                this.__drawGameWon(g);
             } else {
-                this.drawGameOver(g);
+                this.__drawGameOver(g);
             }
         }
         
         if(this.showInstructions){
-            this.drawInstructions(g,10,535);
+            this.__drawInstructions(g,10,535);
         }
         if(this.showPauseMenu){
-            this.drawPauseMenu(g,490,580);
+            this.__drawPauseMenu(g,490,580);
         }
 
         player.draw(g);
@@ -138,7 +134,24 @@ class Model{
         this.showPauseMenu = false;
     }
 
-    private void drawInstructions(Graphics g, int x, int y){
+
+    // protected methods
+    protected void addPlayer(PlayerShip p){
+        this.player = p;
+    }
+    protected void addBlast(Blast b){
+        this.blasts.add(b);
+    }
+    protected void addEnemy(EnemyShip e){
+        this.enemies.add(e);
+    }
+
+    // private methods
+    private void __gameOver(){
+        this.gameIsOver = true;
+        this.isPaused = true;
+    }
+    private void __drawInstructions(Graphics g, int x, int y){
         int spacing = 20;
         g.setColor(Color.BLACK);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
@@ -150,8 +163,7 @@ class Model{
         g.drawString("Q to activate powerup1", x,y+spacing*5);
         g.drawString("E to activate powerup2", x,y+spacing*6);
     }
-    
-    private void drawPauseMenu(Graphics g, int x, int y){
+    private void __drawPauseMenu(Graphics g, int x, int y){
         int spacing = 20;
         g.setColor(Color.BLACK);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
@@ -161,8 +173,7 @@ class Model{
         g.drawString("I to show instructions", x,y+spacing*3);
         g.drawString("Esc to resume game", x,y+spacing*4);
     }
-    
-    private void drawGameOver(Graphics g){
+    private void __drawGameOver(Graphics g){
         int spacing = 20;
         g.setColor(Color.red);
         g.fillRect(0,0,height, width);
@@ -172,20 +183,13 @@ class Model{
         g.drawString("main menu", height/2,width/2+spacing*2);
         g.drawString("play again", height/2,width/2+spacing*2);
     }
-    
-    private void drawGameWon(Graphics g){
+    private void __drawGameWon(Graphics g){
         g.setColor(Color.green);
         g.fillRect(0,0,height, width);
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("Level COMPLETE", height/2,width/2);
     }
-
-    private void gameOver(){
-        this.gameIsOver = true;
-        this.isPaused = true;
-    }
-
     private void __updateEnemyShots(){
         synchronized(this.enemies){
             Iterator iter = this.enemies.iterator();
@@ -207,7 +211,7 @@ class Model{
 
         __updateShipShots(this.player);
         if(player.getHealth() < 0){
-            gameOver();
+            __gameOver();
         }
     }
     private void __updateShipShots(Spaceship ship){
