@@ -22,10 +22,16 @@ class Model{
     private int height;
     private int width;
 
+    private int absoluteX;
+    private int absoluteY;
+
 
     Model(int h, int w) throws IOException {
         this.height = h;
         this.width = w;
+        this.absoluteX = 0;
+        this.absoluteY = 0;
+
         this.enemies = new ArrayList<EnemyShip>();
         this.blasts = new ArrayList<Blast>();
         this.isPaused = false;
