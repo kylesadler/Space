@@ -59,13 +59,6 @@ class Model{
         __updateEnemies();
         
     }
-
-    private void __updateBlasts(){
-        for(Blast b : blasts){
-            b.updateState();
-        }
-        __removeOutOfBoundsBlasts();
-    }
     
     public void updateImage(Graphics g) {
         if(this.gameIsOver){
@@ -92,23 +85,16 @@ class Model{
         }
     }
 
+
     public void setAngle(int x, int y){if(this.isPaused){return;}player.setAngle(x, y);}
 
     public void firePrimary(){
         if(this.isPaused){return;}
-        primaryShot(player);
+        __primaryShot(player);
     }
     public void fireSecondary(){
         if(this.isPaused){return;}
-        secondaryShot(player);
-    }
-    public void secondaryShot(Spaceship s){
-        int[] coords = s.getFiringCoords();
-        blasts.add(new SecondaryBlast(coords[0],coords[1],s.getAngle()));
-    }
-    public void primaryShot(Spaceship s){
-        int[] coords = s.getFiringCoords();
-        blasts.add(new PrimaryBlast(coords[0],coords[1],s.getAngle()));
+        __secondaryShot(player);
     }
 
     public void moveRight(){player.moveRight();}
@@ -116,19 +102,19 @@ class Model{
     public void moveUp(){player.moveUp();}
     public void moveDown(){player.moveDown();}
 
-    public void powerup1(){}
-    public void powerup2(){}
+    public void powerup1(){
+    }
+    public void powerup2(){
+    }
 
     public void pause(){
         this.isPaused = true;
         this.showPauseMenu = true;
         // this.showInstructions = true;
     }
-
     public void instructions(){
         this.showInstructions = !this.showInstructions;
     }
-
     public void resume(){
         this.isPaused = false;
         this.showPauseMenu = false;
@@ -145,6 +131,7 @@ class Model{
     protected void addEnemy(EnemyShip e){
         this.enemies.add(e);
     }
+
 
     // private methods
     private void __gameOver(){
@@ -189,6 +176,20 @@ class Model{
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("Level COMPLETE", height/2,width/2);
+    }
+    private void __updateBlasts(){
+        for(Blast b : blasts){
+            b.updateState();
+        }
+        __removeOutOfBoundsBlasts();
+    }
+    private void __secondaryShot(Spaceship s){
+        int[] coords = s.getFiringCoords();
+        blasts.add(new SecondaryBlast(coords[0],coords[1],s.getAngle()));
+    }
+    private void __primaryShot(Spaceship s){
+        int[] coords = s.getFiringCoords();
+        blasts.add(new PrimaryBlast(coords[0],coords[1],s.getAngle()));
     }
     private void __updateEnemyShots(){
         synchronized(this.enemies){
@@ -248,9 +249,9 @@ class Model{
         for(EnemyShip e : enemies){
             int shot = e.updateState(player);
             if(shot == 1){
-                primaryShot(e);
+                __primaryShot(e);
             } else if(shot == 2){
-                secondaryShot(e);
+                __secondaryShot(e);
             }            
         }
         
