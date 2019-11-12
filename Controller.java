@@ -15,12 +15,16 @@ import javax.swing.SwingUtilities;
 
 class Controller implements MouseListener, KeyListener, MouseMotionListener
 {
-    Model model;
+    Level1 model;
     View view;
 
     Controller() throws IOException, Exception {
-        model = new Model();
-        view = new View(this);
+
+        int windowWidth = 1000;
+        int windowHeight = 700;
+
+        model = new Level1(windowWidth, windowHeight);
+        view = new View(this, windowHeight, windowWidth);
         new Timer(50, view).start();
     }
 

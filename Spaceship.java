@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class Spaceship{
 
@@ -14,7 +15,7 @@ public class Spaceship{
     private double health;
     private double maxHealth;
     private Color color;
-    private int SIZE = 100;
+    private int size = 100;
     
 
     public Spaceship(double x_in, double y_in, double angle_in, double maxHealth_in, double maxSpeed_in, Color color_in){
@@ -37,7 +38,7 @@ public class Spaceship{
     public double getMaxSpeed(){return this.maxSpeed;}
     public double getMaxHealth(){return this.maxHealth;}
     public double getHealth(){return this.health;}
-    public double getSize(){return this.SIZE;}
+    public double getSize(){return this.size;}
 
     // public void setX(double x_in){this.x=x_in;}
     // public void setY(double y_in){this.y=y_in;}
@@ -61,15 +62,15 @@ public class Spaceship{
 
     public void draw(Graphics g) {
 		g.setColor(this.color);
-        double error = this.SIZE*Math.sqrt(3)/6;
+        double error = this.size*Math.sqrt(3)/6;
 
         int[] xPoints = new int[3];
-        xPoints[0] = (int) (this.x + Math.cos(this.angle)*(error + this.SIZE/5)); // front
+        xPoints[0] = (int) (this.x + Math.cos(this.angle)*(error + this.size/5)); // front
         xPoints[1] = (int) (this.x + Math.cos(this.angle+2*Math.PI/3)*error); 
         xPoints[2] = (int) (this.x + Math.cos(this.angle-2*Math.PI/3)*error);
 
         int[] yPoints = new int[3];
-        yPoints[0] = (int) (this.y + Math.sin(this.angle)*(error + this.SIZE/5));
+        yPoints[0] = (int) (this.y + Math.sin(this.angle)*(error + this.size/5));
         yPoints[1] = (int) (this.y + Math.sin(this.angle+2*Math.PI/3)*error); 
         yPoints[2] = (int) (this.y + Math.sin(this.angle-2*Math.PI/3)*error);
 
@@ -89,5 +90,16 @@ public class Spaceship{
         this.xVelocity *= 49.0/50;
     }
 
-    
+    public boolean isShot(Blast b){
+
+        return Math.abs(b.getX() - this.x) < 2*b.getSize() && Math.abs(b.getY() - this.y) < 2*b.getSize();
+    }
+
+    public int[] getFiringCoords(){
+        int[] output = new int[2];
+        double error = this.size*Math.sqrt(3)/6;
+        output[0] = (int) (this.x + Math.cos(this.angle)*(error + this.size/5));
+        output[1] = (int) (this.y + Math.sin(this.angle)*(error + this.size/5));
+        return output;
+    }
 }

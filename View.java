@@ -28,9 +28,9 @@ public class View extends JFrame implements ActionListener {
     }
 
 
-    public View(Controller c) throws Exception{
+    public View(Controller c, int windowheight, int windowWidth) throws Exception{
         setTitle("Space");
-        setSize(1000, 700);
+        setSize(windowheight, windowWidth);
         getContentPane().add(new MyPanel(c));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);

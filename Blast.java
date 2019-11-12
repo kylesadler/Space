@@ -29,6 +29,7 @@ public class Blast{
     public int getSize(){return this.size;}
     public void setX(double in){this.x = in;}
     public void setY(double in){this.y = in;}
+    public double getDamage(){return this.damage;}
 
     public void updateImage(Graphics g){
         g.setColor(this.color);
