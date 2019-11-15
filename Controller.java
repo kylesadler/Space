@@ -24,7 +24,7 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
         int windowHeight = 700;
 
         model = new Level1(windowWidth, windowHeight);
-        view = new View(this, windowHeight, windowWidth);
+        view = new View(this, windowWidth, windowHeight);
         new Timer(50, view).start();
     }
 

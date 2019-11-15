@@ -17,6 +17,7 @@ class Model{
     private PlayerShip player;
     private ArrayList<EnemyShip> enemies;
     private ArrayList<Blast> blasts; // fired shots of type blast
+    private ArrayList<Block> blocks; // fired shots of type blast
     
     // game state
     private boolean isPaused;
@@ -33,7 +34,7 @@ class Model{
 
 
     // constructor
-    Model(int h, int w) throws IOException {
+    Model(int w, int h) throws IOException {
         this.height = h;
         this.width = w;
         this.absoluteX = 0;
@@ -41,6 +42,7 @@ class Model{
 
         this.enemies = new ArrayList<EnemyShip>();
         this.blasts = new ArrayList<Blast>();
+        this.blocks = new ArrayList<Block>();
         this.player = null;
 
         this.isPaused = false;
@@ -57,8 +59,8 @@ class Model{
         __updatePlayer();
         __updateBlasts();
         __updateEnemies();
-        
-    }
+        __keepPlayerInBounds(0,0); // x,y
+        }
     
     public void updateImage(Graphics g) {
         if(this.gameIsOver){
@@ -83,44 +85,59 @@ class Model{
         for(EnemyShip e : enemies){
             e.draw(g);
         }
-    }
+        for(Block b : blocks){
+            b.updateImage(g);
+        }
+        }
 
 
-    public void setAngle(int x, int y){if(this.isPaused){return;}player.setAngle(x, y);}
-
+    public void setAngle(int x, int y){
+        if(this.isPaused){
+            return;
+        }
+        player.setAngle(x, y);
+        }
     public void firePrimary(){
         if(this.isPaused){return;}
         __primaryShot(player);
-    }
+        }
     public void fireSecondary(){
         if(this.isPaused){return;}
         __secondaryShot(player);
-    }
+        }
 
-    public void moveRight(){player.moveRight();}
-    public void moveLeft(){player.moveLeft();}
-    public void moveUp(){player.moveUp();}
-    public void moveDown(){player.moveDown();}
+    public void moveRight(){
+        player.moveRight();
+    }
+    public void moveLeft(){
+        player.moveLeft();
+        }
+    public void moveUp(){
+        player.moveUp();
+        }
+    public void moveDown(){
+        player.moveDown();
+        }
 
     public void powerup1(){
-    }
+        }
     public void powerup2(){
-    }
+        }
 
     public void pause(){
         this.isPaused = true;
         this.showPauseMenu = true;
         // this.showInstructions = true;
-    }
+        }
     public void instructions(){
         this.showInstructions = !this.showInstructions;
-    }
+        }
     public void resume(){
         this.isPaused = false;
         this.showPauseMenu = false;
     }
 
-
+    
     // protected methods
     protected void addPlayer(PlayerShip p){
         this.player = p;
@@ -130,6 +147,10 @@ class Model{
     }
     protected void addEnemy(EnemyShip e){
         this.enemies.add(e);
+    }
+
+    protected void addBlock(Block e){
+        this.blocks.add(e);
     }
 
 
@@ -163,19 +184,19 @@ class Model{
     private void __drawGameOver(Graphics g){
         int spacing = 20;
         g.setColor(Color.red);
-        g.fillRect(0,0,height, width);
+        g.fillRect(0,0,width, height);
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Game OVER", height/2,width/2);
-        g.drawString("main menu", height/2,width/2+spacing*2);
-        g.drawString("play again", height/2,width/2+spacing*2);
+        g.drawString("Game OVER", width/2,height/2);
+        g.drawString("main menu", width/2,height/2+spacing);
+        g.drawString("play again", width/2,height/2+spacing*2);
     }
     private void __drawGameWon(Graphics g){
         g.setColor(Color.green);
-        g.fillRect(0,0,height, width);
+        g.fillRect(0,0,width, height);
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Level COMPLETE", height/2,width/2);
+        g.drawString("Level COMPLETE", width/2,height/2);
     }
     private void __updateBlasts(){
         for(Blast b : blasts){
@@ -211,7 +232,7 @@ class Model{
     private void __updatePlayerShots(){
 
         __updateShipShots(this.player);
-        if(player.getHealth() < 0){
+        if(player.getHealth() <= 0){
             __gameOver();
         }
     }
@@ -261,5 +282,28 @@ class Model{
         player.updateState();
     }
 
+    private void __keepPlayerInBounds(double percentX, double percentY){
+        
+        
+        double xmax = this.width*(1-percentX);
+        double xmin = this.width*percentX;
+
+        double ymax = this.height*(1-percentY);
+        double ymin = this.height*percentY;
+        
+        
+        if(player.getX() > xmax){
+            player.setX(xmax);
+        } else if(player.getX() < xmin){
+            player.setX(xmin);
+        }
+
+        if(player.getY() > ymax){
+            player.setY(ymax);
+        } else if(player.getY() < ymin){
+            player.setY(ymin);
+        }
+
+    }
 
 }

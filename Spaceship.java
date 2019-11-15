@@ -54,6 +54,12 @@ public class Spaceship{
     public void setMaxSpeed(double maxSpeed_in){this.maxSpeed=maxSpeed_in;}
     public void setXVelocity(double xvel_in){this.xVelocity=xvel_in;}
     public void setYVelocity(double yvel_in){this.yVelocity=yvel_in;}
+    public void setX(double in){
+        this.x = in;
+    }
+    public void setY(double in){
+        this.y = in;
+    }
 
     public void moveRight(){if(this.xVelocity <= this.maxSpeed-this.maxAccel){this.xVelocity += this.maxAccel;} else if(this.xVelocity > 0){this.xVelocity = this.maxSpeed;}}
     public void moveLeft(){if(this.xVelocity >= -this.maxSpeed+this.maxAccel){this.xVelocity -= this.maxAccel;} else if(this.xVelocity < 0){this.xVelocity = -this.maxSpeed;}}
