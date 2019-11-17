@@ -61,10 +61,24 @@ public class Spaceship{
         this.y = in;
     }
 
-    public void moveRight(){if(this.xVelocity <= this.maxSpeed-this.maxAccel){this.xVelocity += this.maxAccel;} else if(this.xVelocity > 0){this.xVelocity = this.maxSpeed;}}
-    public void moveLeft(){if(this.xVelocity >= -this.maxSpeed+this.maxAccel){this.xVelocity -= this.maxAccel;} else if(this.xVelocity < 0){this.xVelocity = -this.maxSpeed;}}
-    public void moveUp(){if(this.yVelocity >= -this.maxSpeed+this.maxAccel){this.yVelocity -= this.maxAccel;} else if(this.yVelocity < 0){this.yVelocity = -this.maxSpeed;}}
-    public void moveDown(){if(this.yVelocity <= this.maxSpeed-this.maxAccel){this.yVelocity += this.maxAccel;} else if(this.yVelocity > 0){this.yVelocity = this.maxSpeed;}}
+    public void moveRight(){updateSpeed(1,0);}
+    public void moveLeft(){updateSpeed(-1,0);}
+    public void moveUp(){updateSpeed(0,-1);}
+    public void moveDown(){updateSpeed(0,1);}
+
+    private void updateSpeed(int xMult, int yMult){
+        if(Math.abs(this.xVelocity + xMult*this.maxAccel) <= this.maxSpeed){
+            this.xVelocity += xMult*this.maxAccel;
+        } else {
+            this.xVelocity = xMult*this.maxSpeed;
+        }
+
+        if(Math.abs(this.yVelocity + yMult*this.maxAccel) <= this.maxSpeed){
+            this.yVelocity += yMult * this.maxAccel;
+        } else {
+            this.yVelocity = yMult * this.maxSpeed;
+        }
+    }
 
     public void draw(Graphics g, int offsetX, int offsetY) {
 		g.setColor(this.color);
@@ -110,5 +124,30 @@ public class Spaceship{
         output[0] = (int) (this.x + Math.cos(this.angle)*(error + this.size/5));
         output[1] = (int) (this.y + Math.sin(this.angle)*(error + this.size/5));
         return output;
+    }
+
+    public boolean canMoveRight(ArrayList<Block> b){return this.canMove(b,1,0);}
+    public boolean canMoveLeft(ArrayList<Block> b){return this.canMove(b,-1,0);}
+    public boolean canMoveUp(ArrayList<Block> b){return this.canMove(b,0,-1);}
+    public boolean canMoveDown(ArrayList<Block> b){return this.canMove(b,0,1);}
+
+    private boolean canMove(ArrayList<Block> b, int xdirection, int yDirection){
+        double newXthis.x += this.xVelocity;
+        this.y += this.yVelocity;
+        //System.out.println(this.xVelocity);
+        this.yVelocity *= 49.0/50;
+        this.xVelocity *= 49.0/50;
+        
+        for(Block b : this.blocks){
+            double[] newCoords = b.rebound(this.player.getX(), this.player.getY());
+            if(Math.abs(newCoords[0]- this.player.getX()) > 10 || Math.abs(newCoords[1] - this.player.getY()) > 10){
+                System.out.println(newCoords[0] + " " + newCoords[1] + " " + this.player.getX()+" "+this.player.getY());
+                this.player.setX(newCoords[0]);
+                this.player.setY(newCoords[1]);
+                this.player.setXVelocity(0);
+                this.player.setYVelocity(0);
+                break;
+            }
+        }
     }
 }

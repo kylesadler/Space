@@ -61,7 +61,6 @@ class Model{
         __updatePlayer();
         __updateBlasts();
         __updateEnemies();
-        //__keepPlayerInBounds(0,0); // x,y
         }
     
     public void updateImage(Graphics g) {
@@ -109,17 +108,25 @@ class Model{
         }
 
     public void moveRight(){
-        player.moveRight();
+        if(player.canMoveRight(this.blocks)){
+            player.moveRight();
+        }
     }
     public void moveLeft(){
-        player.moveLeft();
+        if(player.canMoveLeft(this.blocks)){
+            player.moveLeft();
         }
+    }
     public void moveUp(){
-        player.moveUp();
+        if(player.canMoveUp(this.blocks)){
+            player.moveUp();
         }
+    }
     public void moveDown(){
-        player.moveDown();
+        if(player.canMoveDown(this.blocks)){
+            player.moveDown();
         }
+    }
 
     public void powerup1(){
         }
@@ -266,7 +273,7 @@ class Model{
                 double blastX = b.getX()-offsetX;
                 double blastY = b.getY()-offsetY;
                 if(blastX > this.width*2 || blastX < -this.width || blastY > this.height*2 || blastY < -this.width){
-                    //iter.remove();
+                    iter.remove();
                 }
             }
         }
@@ -285,6 +292,7 @@ class Model{
         }
         
     }
+
     private void __updatePlayer(){
         __updatePlayerShots(); // shots against player
         player.updateState();
