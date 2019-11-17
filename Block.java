@@ -17,11 +17,11 @@ public class Block{
         this.sections.add(coords);
     }
 
-    public void updateImage(Graphics g) {
+    public void updateImage(Graphics g, int offsetX, int offsetY) {
 		g.setColor(this.color);
         
         for (int[] coord : sections){
-            g.fillRect (coord[0], coord[1], coord[2]-coord[0], coord[3]-coord[1]);
+            g.fillRect (coord[0]-offsetX, coord[1]-offsetY, coord[2]-coord[0], coord[3]-coord[1]);
         }
 	}
 }

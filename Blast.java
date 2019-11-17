@@ -31,9 +31,11 @@ public class Blast{
     public void setY(double in){this.y = in;}
     public double getDamage(){return this.damage;}
 
-    public void updateImage(Graphics g){
+    public void updateImage(Graphics g, int offsetX, int offsetY){
+        double newX = this.x-offsetX;
+        double newY = this.y-offsetY;
         g.setColor(this.color);
-        g.fillOval((int) this.x, (int) this.y, this.size, this.size);
+        g.fillOval((int) newX, (int) newY, this.size, this.size);
     }
 
     public void updateState(){

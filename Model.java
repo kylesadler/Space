@@ -29,16 +29,16 @@ class Model{
     // window information
     private int height;
     private int width;
-    private int absoluteX;
-    private int absoluteY;
+    private int offsetX;
+    private int offsetY;
 
 
     // constructor
     Model(int w, int h) throws IOException {
         this.height = h;
         this.width = w;
-        this.absoluteX = 0;
-        this.absoluteY = 0;
+        // this.offsetX = 0;
+        // this.offsetY = 0;
 
         this.enemies = new ArrayList<EnemyShip>();
         this.blasts = new ArrayList<Blast>();
@@ -56,10 +56,12 @@ class Model{
     // public methods
     public void updateState(){
         if(this.isPaused){return;}
+        this.offsetX = (int) (this.player.getX() - this.width/2);
+        this.offsetY = (int) (this.player.getY() - this.height/2);
         __updatePlayer();
         __updateBlasts();
         __updateEnemies();
-        __keepPlayerInBounds(0,0); // x,y
+        //__keepPlayerInBounds(0,0); // x,y
         }
     
     public void updateImage(Graphics g) {
@@ -78,24 +80,24 @@ class Model{
             this.__drawPauseMenu(g,490,580);
         }
 
-        player.draw(g);
+        player.draw(g, this.offsetX, this.offsetY);
         for(Blast b : blasts){
-            b.updateImage(g);
+            b.updateImage(g, this.offsetX, this.offsetY);
         }
         for(EnemyShip e : enemies){
-            e.draw(g);
+            e.draw(g, this.offsetX, this.offsetY);
         }
         for(Block b : blocks){
-            b.updateImage(g);
+            b.updateImage(g, this.offsetX, this.offsetY);
         }
-        }
+    }
 
 
     public void setAngle(int x, int y){
         if(this.isPaused){
             return;
         }
-        player.setAngle(x, y);
+        player.setAngle(x+this.offsetX, y+this.offsetY);
         }
     public void firePrimary(){
         if(this.isPaused){return;}
@@ -141,6 +143,10 @@ class Model{
     // protected methods
     protected void addPlayer(PlayerShip p){
         this.player = p;
+        this.player.setX(this.width/2);
+        this.player.setY(this.height/2);
+        // this.offsetX = this.player.getX();
+        // this.offsetY = this.height;
     }
     protected void addBlast(Blast b){
         this.blasts.add(b);
@@ -257,8 +263,10 @@ class Model{
 
             while (iter.hasNext()) {
                 Blast b = (Blast) iter.next();
-                if(b.getX() > this.width || b.getX() < 0 || b.getY() > this.height || b.getY() < 0){
-                    iter.remove();
+                double blastX = b.getX()-offsetX;
+                double blastY = b.getY()-offsetY;
+                if(blastX > this.width*2 || blastX < -this.width || blastY > this.height*2 || blastY < -this.width){
+                    //iter.remove();
                 }
             }
         }

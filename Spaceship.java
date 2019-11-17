@@ -66,25 +66,28 @@ public class Spaceship{
     public void moveUp(){if(this.yVelocity >= -this.maxSpeed+this.maxAccel){this.yVelocity -= this.maxAccel;} else if(this.yVelocity < 0){this.yVelocity = -this.maxSpeed;}}
     public void moveDown(){if(this.yVelocity <= this.maxSpeed-this.maxAccel){this.yVelocity += this.maxAccel;} else if(this.yVelocity > 0){this.yVelocity = this.maxSpeed;}}
 
-    public void draw(Graphics g) {
+    public void draw(Graphics g, int offsetX, int offsetY) {
 		g.setColor(this.color);
+        double newX = this.x-offsetX;
+        double newY = this.y-offsetY;
+
         double error = this.size*Math.sqrt(3)/6;
 
         int[] xPoints = new int[3];
-        xPoints[0] = (int) (this.x + Math.cos(this.angle)*(error + this.size/5)); // front
-        xPoints[1] = (int) (this.x + Math.cos(this.angle+2*Math.PI/3)*error); 
-        xPoints[2] = (int) (this.x + Math.cos(this.angle-2*Math.PI/3)*error);
+        xPoints[0] = (int) (newX + Math.cos(this.angle)*(error + this.size/5)); // front
+        xPoints[1] = (int) (newX + Math.cos(this.angle+2*Math.PI/3)*error); 
+        xPoints[2] = (int) (newX + Math.cos(this.angle-2*Math.PI/3)*error);
 
         int[] yPoints = new int[3];
-        yPoints[0] = (int) (this.y + Math.sin(this.angle)*(error + this.size/5));
-        yPoints[1] = (int) (this.y + Math.sin(this.angle+2*Math.PI/3)*error); 
-        yPoints[2] = (int) (this.y + Math.sin(this.angle-2*Math.PI/3)*error);
+        yPoints[0] = (int) (newY + Math.sin(this.angle)*(error + this.size/5));
+        yPoints[1] = (int) (newY + Math.sin(this.angle+2*Math.PI/3)*error); 
+        yPoints[2] = (int) (newY + Math.sin(this.angle-2*Math.PI/3)*error);
 
         g.fillPolygon(xPoints, yPoints, 3);
 
         //g.setColor(Color.RED);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 13));
-        g.drawString(this.health+"", (int)this.x, (int)(this.y - 30));
+        g.drawString(this.health+"", (int)newX, (int)(newY - 30));
         
 	}
 

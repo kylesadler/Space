@@ -14,7 +14,7 @@ public class PlayerShip extends Spaceship{
     }
 
     public void draw(Graphics g){
-        super.draw(g);
+        super.draw(g, 0, 0);
         g.setColor(Color.BLACK);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("Health: "+this.getHealth(), 20,20);
