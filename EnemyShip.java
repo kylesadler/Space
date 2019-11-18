@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class EnemyShip extends Spaceship{
 
@@ -16,7 +17,7 @@ public class EnemyShip extends Spaceship{
     }
     
     public int updateState(PlayerShip p) { // 1 if firing primary, 2 secondary, 0 none
-        super.updateState();
+        super.updateState(new ArrayList<Block>(), false);
         double xDist = p.getX()-this.getX();
         double yDist = p.getY()-this.getY();
         int distance = (int) Math.sqrt(xDist*xDist + yDist*yDist);

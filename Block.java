@@ -17,6 +17,16 @@ public class Block{
         this.sections.add(coords);
     }
 
+    public boolean intersect(double x, double y, int error){
+        for (int[] b : this.sections){
+            if(x > b[0]-error && x < b[2]+error && y > b[1]-error && y < b[3]+error){ // if inside block
+                return true;
+            }
+        }
+        return false;
+             
+    }
+
     public double[] rebound(double x, double y){
         double[] output = new double[2];
         output[0] = x;

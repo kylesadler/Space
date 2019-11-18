@@ -108,24 +108,24 @@ class Model{
         }
 
     public void moveRight(){
-        if(player.canMoveRight(this.blocks)){
+        //if(player.canMoveRight(this.blocks)){
             player.moveRight();
-        }
+        //}
     }
     public void moveLeft(){
-        if(player.canMoveLeft(this.blocks)){
+        //if(player.canMoveLeft(this.blocks)){
             player.moveLeft();
-        }
+        //}
     }
     public void moveUp(){
-        if(player.canMoveUp(this.blocks)){
+        //if(player.canMoveUp(this.blocks)){
             player.moveUp();
-        }
+        //}
     }
     public void moveDown(){
-        if(player.canMoveDown(this.blocks)){
+        //if(player.canMoveDown(this.blocks)){
             player.moveDown();
-        }
+        //}
     }
 
     public void powerup1(){
@@ -264,6 +264,7 @@ class Model{
         }
 
     }
+    
     private void __removeOutOfBoundsBlasts(){
         synchronized(this.blasts){
             ListIterator iter = this.blasts.listIterator();
@@ -274,6 +275,13 @@ class Model{
                 double blastY = b.getY()-offsetY;
                 if(blastX > this.width*2 || blastX < -this.width || blastY > this.height*2 || blastY < -this.width){
                     iter.remove();
+                    continue;
+                }
+                for(Block blk : this.blocks){
+                    if(blk.intersect(b.getX(), b.getY(), b.getSize())){
+                        iter.remove();
+                        continue;
+                    }
                 }
             }
         }
@@ -295,7 +303,7 @@ class Model{
 
     private void __updatePlayer(){
         __updatePlayerShots(); // shots against player
-        player.updateState();
+        player.updateState(this.blocks, true);
     }
 
     private void __keepPlayerInBounds(double percentX, double percentY){

@@ -105,12 +105,31 @@ public class Spaceship{
         
 	}
 
-	public void updateState() {
-        this.x += this.xVelocity;
-        this.y += this.yVelocity;
+	public void updateState(ArrayList<Block> blks, boolean player) {
+        double newX = this.x + this.xVelocity;
+        double newY = this.y + this.yVelocity;
+        double newXVel = this.xVelocity * 49.0/50;
+        double newYVel = this.yVelocity * 49.0/50;
+
+        if(player){
+            for(Block b : blks){
+                if(b.intersect(newX, newY, (int) (this.size*Math.sqrt(3)/6))){
+                    newX = this.x;
+                    newY = this.y;
+                    newXVel *= -1;
+                    newYVel *= -1;
+                }
+            }
+        }
+        // this.x += this.xVelocity;
+        // this.y += this.yVelocity;
         //System.out.println(this.xVelocity);
-        this.yVelocity *= 49.0/50;
-        this.xVelocity *= 49.0/50;
+        // this.yVelocity *= 49.0/50;
+        // this.xVelocity *= 49.0/50;
+        this.x = newX;
+        this.y = newY;
+        this.yVelocity = newYVel;
+        this.xVelocity = newXVel;
     }
 
     public boolean isShot(Blast b){
@@ -132,22 +151,31 @@ public class Spaceship{
     public boolean canMoveDown(ArrayList<Block> b){return this.canMove(b,0,1);}
 
     private boolean canMove(ArrayList<Block> b, int xdirection, int yDirection){
-        double newXthis.x += this.xVelocity;
-        this.y += this.yVelocity;
-        //System.out.println(this.xVelocity);
-        this.yVelocity *= 49.0/50;
-        this.xVelocity *= 49.0/50;
+        return true;
+        // double newXVel = this.xVelocity;
+        // double newYVel = this.yVelocity;
         
-        for(Block b : this.blocks){
-            double[] newCoords = b.rebound(this.player.getX(), this.player.getY());
-            if(Math.abs(newCoords[0]- this.player.getX()) > 10 || Math.abs(newCoords[1] - this.player.getY()) > 10){
-                System.out.println(newCoords[0] + " " + newCoords[1] + " " + this.player.getX()+" "+this.player.getY());
-                this.player.setX(newCoords[0]);
-                this.player.setY(newCoords[1]);
-                this.player.setXVelocity(0);
-                this.player.setYVelocity(0);
-                break;
-            }
-        }
+        // if(Math.abs(newXVel + xdirection*this.maxAccel) <= this.maxSpeed){
+        //     newXVel += xdirection*this.maxAccel;
+        // } else {
+        //     newXVel = xdirection*this.maxSpeed;
+        // }
+
+        // if(Math.abs(newYVel + yDirection*this.maxAccel) <= this.maxSpeed){
+        //     newYVel += yDirection * this.maxAccel;
+        // } else {
+        //     newYVel = yDirection * this.maxSpeed;
+        // }
+        // double newX = this.x + newYVel;
+        // double newY = this.y + newYVel;
+        
+        // for(Block blk : b){
+        //     if(blk.intersect(newX, newY, this.size)){
+        //         return false;
+                
+        //     }
+        // }
+
+        // return true;
     }
 }
