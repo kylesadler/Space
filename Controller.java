@@ -12,7 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import javax.swing.Timer;
 import javax.swing.SwingUtilities;
-
+// need JMenuBar
 class Controller implements MouseListener, KeyListener, MouseMotionListener
 {
     Level1 model;
@@ -35,13 +35,9 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
 
     public void mousePressed(MouseEvent e) {
         if (SwingUtilities.isLeftMouseButton(e)) {
-            // player.firePrimary();
             model.firePrimary();
-            //System.out.println("firePrimary");
   		} else if (SwingUtilities.isRightMouseButton(e))  {
-            // model.fireSecondary();
             model.fireSecondary();
-            //System.out.println("fire secondary");
 	    }
     }
 
