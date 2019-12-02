@@ -110,14 +110,17 @@ public class Spaceship{
         double newY = this.y + this.yVelocity;
         double newXVel = this.xVelocity * 49.0/50;
         double newYVel = this.yVelocity * 49.0/50;
+        int error = (int) (this.size*Math.sqrt(3)/6);
 
         if(player){
             for(Block b : blks){
-                if(b.intersect(newX, newY, (int) (this.size*Math.sqrt(3)/6))){
+                if(b.intersect(newX, newY, error)){
                     newX = this.x;
                     newY = this.y;
-                    newXVel *= -1;
-                    newYVel *= -1;
+
+                    int[] mults = b.getBounceMultipliers(newX, newY, error);
+                    newXVel *= mults[0];
+                    newYVel *= mults[1];
                 }
             }
         }

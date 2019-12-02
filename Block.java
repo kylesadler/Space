@@ -27,6 +27,26 @@ public class Block{
              
     }
 
+
+    public int[] getBounceMultipliers(double x, double y, int error){
+        // x, y are in current block
+        
+        int[] output = new int[2];
+        for (int[] b : this.sections){
+        // if bouncing in the x direction
+            if(Math.min(x - (b[0]-error), x - (b[2]+error)) < Math.min(y - (b[1]-error), y - (b[3]+error))){ // if inside block
+                output[0] = -1;
+                output[1] = 1;
+            }else{
+                output[1] = -1;
+                output[0] = 1;
+            }
+        }
+
+        return output;
+             
+    }
+
     public double[] rebound(double x, double y){
         double[] output = new double[2];
         output[0] = x;
