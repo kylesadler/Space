@@ -66,6 +66,14 @@ class Model{
     public void updateImage(Graphics g) {
         
         
+        if(this.gameIsOver){
+            if(this.gameIsWon){
+                this.__drawGameWon(g);
+            } else {
+                this.__drawGameOver(g, this.width/2-50, this.height/2);
+            }
+        }
+        
         for(Block b : blocks){
             b.updateImage(g, this.offsetX, this.offsetY);
         }
@@ -85,14 +93,6 @@ class Model{
             this.__drawPauseMenu(g,this.width/2-100, this.height/2-75);
         }
         
-        if(this.gameIsOver){
-            if(this.gameIsWon){
-                this.__drawGameWon(g);
-            } else {
-                this.__drawGameOver(g, this.width/2-50, this.height/2);
-            }
-        }
-       
     }
 
 

@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 // need JMenuBar
 class Controller implements MouseListener, KeyListener, MouseMotionListener
 {
-    Level1 model;
+    Model model; // current view
     View view;
 
     Controller() throws IOException, Exception {
@@ -23,8 +23,8 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
         int windowWidth = 1000;
         int windowHeight = 700;
 
-        menu = new Menu(windowWidth, windowHeight);
-        model = new Level1(windowWidth, windowHeight);
+        model = (Model) (new Menu(windowWidth, windowHeight));
+        // model = (Model) (new Level1(windowWidth, windowHeight));
         view = new View(this, windowWidth, windowHeight);
         new Timer(50, view).start();
     }
