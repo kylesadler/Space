@@ -64,21 +64,11 @@ class Model{
         }
     
     public void updateImage(Graphics g) {
-        if(this.gameIsOver){
-            if(this.gameIsWon){
-                this.__drawGameWon(g);
-            } else {
-                this.__drawGameOver(g);
-            }
-        }
         
-        if(this.showInstructions){
-            this.__drawInstructions(g,10,535);
+        
+        for(Block b : blocks){
+            b.updateImage(g, this.offsetX, this.offsetY);
         }
-        if(this.showPauseMenu){
-            this.__drawPauseMenu(g,490,580);
-        }
-
         player.draw(g, this.offsetX, this.offsetY);
         for(Blast b : blasts){
             b.updateImage(g, this.offsetX, this.offsetY);
@@ -86,9 +76,23 @@ class Model{
         for(EnemyShip e : enemies){
             e.draw(g, this.offsetX, this.offsetY);
         }
-        for(Block b : blocks){
-            b.updateImage(g, this.offsetX, this.offsetY);
+
+        this.__drawOptions(g, 10, this.height-100);
+        if(this.showInstructions){
+            this.__drawInstructions(g,100,this.height-100);
         }
+        if(this.showPauseMenu){
+            this.__drawPauseMenu(g,this.width/2-100, this.height/2-75);
+        }
+        
+        if(this.gameIsOver){
+            if(this.gameIsWon){
+                this.__drawGameWon(g);
+            } else {
+                this.__drawGameOver(g, this.width/2-50, this.height/2);
+            }
+        }
+       
     }
 
 
@@ -172,6 +176,13 @@ class Model{
         this.gameIsOver = true;
         this.isPaused = true;
     }
+    private void __drawOptions(Graphics g, int x, int y){
+        int spacing = 20;
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("P to pause", x,y);
+        g.drawString("I for instructions", x,y+spacing);
+    }
     private void __drawInstructions(Graphics g, int x, int y){
         int spacing = 20;
         g.setColor(Color.BLACK);
@@ -189,27 +200,26 @@ class Model{
         g.setColor(Color.BLACK);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("Game paused:", x,y);
-        g.drawString("main menu", x,y+spacing);
-        g.drawString("Q to quit", x,y+spacing*2);
-        g.drawString("I to show instructions", x,y+spacing*3);
-        g.drawString("Esc to resume game", x,y+spacing*4);
+        g.drawString("Q to quit to main menu", x,y+spacing);
+        g.drawString("I for instructions", x,y+spacing*2);
+        g.drawString("Esc to resume game", x,y+spacing*3);
     }
-    private void __drawGameOver(Graphics g){
+    private void __drawGameOver(Graphics g, int x, int y){
         int spacing = 20;
         g.setColor(Color.red);
-        g.fillRect(0,0,width, height);
+        g.fillRect(0,0, this.width, this.height);
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Game OVER", width/2,height/2);
-        g.drawString("main menu", width/2,height/2+spacing);
-        g.drawString("play again", width/2,height/2+spacing*2);
+        g.drawString("Game OVER", x,y);
+        g.drawString("Q for main menu", x,y+spacing);
+        g.drawString("R to play again", x,y+spacing*2);
     }
     private void __drawGameWon(Graphics g){
         g.setColor(Color.green);
-        g.fillRect(0,0,width, height);
+        g.fillRect(0,0,this.width, this.height);
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Level COMPLETE", width/2,height/2);
+        g.drawString("Level COMPLETE", width/2-75,height/2-150);
     }
     private void __updateBlasts(){
         for(Blast b : blasts){

@@ -124,11 +124,6 @@ public class Spaceship{
                 }
             }
         }
-        // this.x += this.xVelocity;
-        // this.y += this.yVelocity;
-        //System.out.println(this.xVelocity);
-        // this.yVelocity *= 49.0/50;
-        // this.xVelocity *= 49.0/50;
         this.x = newX;
         this.y = newY;
         this.yVelocity = newYVel;
