@@ -12,9 +12,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import javax.swing.Timer;
 import javax.swing.SwingUtilities;
+import java.io.*; 
+
+
 // need JMenuBar
-class Controller implements MouseListener, KeyListener, MouseMotionListener
-{
+class Controller implements MouseListener, KeyListener, MouseMotionListener, Serializable{
     Model model; // current view
     View view;
 
@@ -61,13 +63,51 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener
         } else if (e.getKeyChar() == 'd') {
             model.moveRight();
         } else if (e.getKeyChar() == 'p') {
-            model.pause();
+            pause();
         } else if (e.getKeyChar() == 'i') {
-            model.instructions();
+            instructions();
         }else if (e.getKeyCode() == 27) { // escape
             model.resume();
         } 
     }
+    public void instructions(){
+        model.instructions();
+    }
+    public void exit(){
+        System.exit(0);
+    }
+     public void load(){
+    }
+     public void save(){
+        // save to saved_game.ser
+        String filename = "saved_game.ser"; 
+        try
+        {    
+            //Saving of object in a file 
+            FileOutputStream file = new FileOutputStream(filename); 
+            ObjectOutputStream out = new ObjectOutputStream(file); 
+              
+            // Method for serialization of object 
+            out.writeObject(this); 
+              
+            out.close(); 
+            file.close(); 
+              
+            System.out.println("Object has been serialized"); 
+  
+        } 
+          
+        catch(IOException e) 
+        { 
+            System.out.println("failed to save"); 
+            e.printStackTrace();
+        } 
+    }
+     public void pause(){
+        model.pause();
+    }
+
+
     public void keyTyped(KeyEvent e) {}
     public void keyReleased   (KeyEvent e){}
     public void mouseReleased (MouseEvent e) {}
