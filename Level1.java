@@ -1,11 +1,16 @@
 
+/*
+Kyle Sadler
+Programming Paradigms Honors Project
+December 9th, 2019
+*/
 import java.io.IOException;
 import java.awt.Color;
 
 public class Level1 extends Model {
 
     public Level1(int h, int w) {
-        super(h,w);
+        super(h,w, false);
 		    super.addPlayer(new PlayerShip(100, 100, 10));
 
         int wallWidth = 50;

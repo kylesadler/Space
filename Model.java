@@ -1,7 +1,7 @@
 /*
 Kyle Sadler
-Programming Paradigms Assignment 5
-October 18th, 2019
+Programming Paradigms Honors Project
+December 9th, 2019
 */
 import java.awt.Graphics;
 import java.awt.Color;
@@ -25,6 +25,8 @@ class Model implements Serializable{
     private boolean showPauseMenu;
     private boolean gameIsOver;
     private boolean gameIsWon;
+    private boolean menu; // show menu
+    private boolean isMenu;
 
     // window information
     private int height;
@@ -37,7 +39,7 @@ class Model implements Serializable{
 
 
     // constructor
-    Model(int w, int h) {
+    Model(int w, int h, boolean isMenu_) {
         this.height = h;
         this.width = w;
         // this.offsetX = 0;
@@ -53,7 +55,7 @@ class Model implements Serializable{
         this.showPauseMenu = false;
         this.gameIsOver = false;
         this.gameIsWon = false;
-        
+        this.isMenu = isMenu_;
     }
 
     public boolean isGameWon(){return this.gameIsWon;}
@@ -73,7 +75,7 @@ class Model implements Serializable{
     public void updateImage(Graphics g) {
         
         
-        if(this.gameIsOver){
+        if(this.gameIsOver && !this.isMenu){
             if(this.gameIsWon){
                 this.__drawGameWon(g);
             } else {
@@ -98,6 +100,9 @@ class Model implements Serializable{
         }
         if(this.showPauseMenu){
             this.__drawPauseMenu(g,600, this.height-500);
+        }
+        if(this.menu){
+            this.__drawMenu(g);
         }
         
     }
@@ -170,6 +175,14 @@ class Model implements Serializable{
         this.blocks.add(e);
     }
 
+    public void drawMenu(){
+      this.menu = true;
+      this.showInstructions = true;
+    }
+    public void __drawMenu(Graphics g){
+      String[] words = {"Space to play"};
+        __drawWords(g, words, 600, this.height-500);
+    }
 
     // private methods
     private void __gameOver(){
@@ -204,8 +217,8 @@ class Model implements Serializable{
     private void __drawGameOver(Graphics g){
        g.setColor(Color.red);
        g.fillRect(0,0,this.width, this.height);
-       String[] words = {"Game OVER", "Q to quit to main menu", "R to play again"};
-        __drawWords(g, words, width/2-75, height/2+50);
+       String[] words = {"Game OVER", "Q for main menu"};
+        __drawWords(g, words, width/2-75, height/2+100);
     }
     private void __drawGameWon(Graphics g){
         g.setColor(Color.green);

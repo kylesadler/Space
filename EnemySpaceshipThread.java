@@ -1,3 +1,8 @@
+/*
+Kyle Sadler
+Programming Paradigms Honors Project
+December 9th, 2019
+*/
 import java.util.ArrayList;
 import java.io.*;
 
@@ -9,24 +14,24 @@ public class EnemySpaceshipThread implements Runnable, Serializable{
     public EnemySpaceshipThread(PlayerShip p_in){
         this.s = new ArrayList<EnemyShip>();
         this.p = p_in;
-        System.out.println(this.p);
+        // System.out.println(this.p);
     }
 
     public void run(){
         while(true){
           // System.out.println("running with "+this.s.size());
           
-          synchronized(this.s){
-            // __updateEnemyShots();
-            for(EnemyShip e : this.s){
-              // int shot = e.updateState(this.p);
-              // if(shot == 1){
-              //     __primaryShot(e);
-              // } else if(shot == 2){
-              //     __secondaryShot(e);
-              // }   
-            }
-          }
+          // synchronized(this.s){
+          //   // __updateEnemyShots();
+          //   for(EnemyShip e : this.s){
+          //     //int shot = e.updateState(this.p);
+          //     // if(shot == 1){
+          //     //     __primaryShot(e);
+          //     // } else if(shot == 2){
+          //     //     __secondaryShot(e);
+          //     // }   
+          //   }
+          // }
             
           try {Thread.sleep(20);} catch (InterruptedException e) {}
         }

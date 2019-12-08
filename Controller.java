@@ -1,8 +1,9 @@
 /*
 Kyle Sadler
-Programming Paradigms Assignment 5
-October 18th, 2019
+Programming Paradigms Honors Project
+December 9th, 2019
 */
+
 import java.awt.Graphics;
 import java.io.IOException;
 import java.awt.event.MouseListener;
@@ -70,7 +71,8 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
             }
         } else if (e.getKeyChar() == 'q') { // space
             if(this.model.isGameOver() || this.model.isGamePaused()){
-              changeLevel(0);
+              this.currentLevel = 0;
+              changeLevel(this.currentLevel);
             }
         }
         

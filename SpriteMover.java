@@ -1,8 +1,9 @@
 /*
 Kyle Sadler
-Programming Paradigms Assignment 5
-October 18th, 2019
+Programming Paradigms Honors Project
+December 9th, 2019
 */
+
 public class SpriteMover implements Runnable{
 
     Model model;

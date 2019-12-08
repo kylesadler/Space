@@ -1,3 +1,8 @@
+/*
+Kyle Sadler
+Programming Paradigms Honors Project
+December 9th, 2019
+*/
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;

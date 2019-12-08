@@ -1,11 +1,16 @@
 
+/*
+Kyle Sadler
+Programming Paradigms Honors Project
+December 9th, 2019
+*/
 import java.io.IOException;
 import java.awt.Color;
 
 public class Level2 extends Model {
 
     public Level2(int h, int w) {
-        super(h,w);
+        super(h,w, false);
 		    super.addPlayer(new PlayerShip(100, 100, 10));
 
         int wallWidth = 50;
@@ -26,10 +31,10 @@ public class Level2 extends Model {
         b.addBlock(width-wallWidth,-500,width,1000);
 
 
-        int num_enemies = 4;
+        int num_enemies = 10;
         // enemies
         for (int i=0;i<num_enemies;i++){
-          int x = (int) (Math.random()*1000+750);
+          int x = (int) (Math.random()*650+1250);
           int y = (int) (Math.random()*1000-250);
           super.addEnemy(new EnemyShip(x, y, 10));
         }
