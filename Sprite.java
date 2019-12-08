@@ -1,8 +1,9 @@
 /*
 Kyle Sadler
-Programming Paradigms Assignment 5
-October 18th, 2019
+Programming Paradigms Honors Project
+December 9th, 2019
 */
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
