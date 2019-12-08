@@ -17,13 +17,14 @@ import java.io.*;
 
 // need JMenuBar
 class Controller implements MouseListener, KeyListener, MouseMotionListener, Serializable{
-    Model model; // current view
-    View view;
+    private Model model; // current game screen
+    private View view;
+    private int windowWidth = 1000;
+    private int windowHeight = 700;
+    private int currentLevel = 0;
+
 
     Controller() throws IOException, Exception {
-
-        int windowWidth = 1000;
-        int windowHeight = 700;
 
         model = (Model) (new Menu(windowWidth, windowHeight));
         // model = (Model) (new Level1(windowWidth, windowHeight));
@@ -48,13 +49,7 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
     public void mouseDragged(MouseEvent e) {model.setAngle(e.getX(), e.getY());}
 
     public void keyPressed    (KeyEvent e){
-        if (e.getKeyChar() == 'q') {
-            // powerup 1
-            System.out.println("powerup 1");
-        } else if (e.getKeyChar() == 'e') {
-            // powerup 2
-            System.out.println("powerup 2");
-        } else if (e.getKeyChar() == 'w') {
+        if (e.getKeyChar() == 'w') {
             model.moveUp(); 
         } else if (e.getKeyChar() == 'a') {
             model.moveLeft();
@@ -66,9 +61,20 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
             pause();
         } else if (e.getKeyChar() == 'i') {
             instructions();
-        }else if (e.getKeyCode() == 27) { // escape
+        } else if (e.getKeyCode() == 27) { // escape
             model.resume();
-        } 
+        } else if (e.getKeyCode() == 32) { // space to coninue
+            if(this.model.isGameWon()){
+              this.currentLevel++;
+              changeLevel(this.currentLevel);
+            }
+        } else if (e.getKeyChar() == 'q') { // space
+            if(this.model.isGameOver() || this.model.isGamePaused()){
+              changeLevel(0);
+            }
+        }
+        
+       
     }
     public void instructions(){
         model.instructions();
@@ -76,24 +82,32 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
     public void exit(){
         System.exit(0);
     }
-     public void load(){
+    public void load(){
+      try {
+          FileInputStream file = new FileInputStream("saved_game.ser");
+          ObjectInputStream inStream = new ObjectInputStream(file);
+          Controller c = (Controller) inStream.readObject();
+          this.model = c.model;
+          this.view = c.view;
+          
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
     }
-     public void save(){
+    public void save(){
         // save to saved_game.ser
         String filename = "saved_game.ser"; 
         try
         {    
-            //Saving of object in a file 
             FileOutputStream file = new FileOutputStream(filename); 
             ObjectOutputStream out = new ObjectOutputStream(file); 
               
-            // Method for serialization of object 
             out.writeObject(this); 
               
             out.close(); 
             file.close(); 
               
-            System.out.println("Object has been serialized"); 
+            // System.out.println("Object has been serialized"); 
   
         } 
           
@@ -103,8 +117,19 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
             e.printStackTrace();
         } 
     }
-     public void pause(){
+    public void pause(){
         model.pause();
+    }
+    public void changeLevel(int lvl){
+      if(lvl == 1){
+        model = (Model) (new Level1(this.windowWidth, this.windowHeight));
+      } else if(lvl == 2){
+        model = (Model) (new Level2(this.windowWidth, this.windowHeight));
+      } else if(lvl == 3){
+        model = (Model) (new Level3(this.windowWidth, this.windowHeight));
+      } else {
+        model = (Model) (new Menu(this.windowWidth, this.windowHeight));
+      }
     }
 
 

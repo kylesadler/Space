@@ -2,8 +2,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.io.*;
 
-public class Spaceship{
+public class Spaceship implements Serializable{
 
     private double x;
     private double y;
@@ -135,11 +136,11 @@ public class Spaceship{
         return Math.abs(b.getX() - this.x) < 2*b.getSize() && Math.abs(b.getY() - this.y) < 2*b.getSize();
     }
 
-    public int[] getFiringCoords(){
+    public int[] getFiringCoords(int type_){ // 1 for primary, 2 for secondary
         int[] output = new int[2];
-        double error = this.size*Math.sqrt(3)/6;
-        output[0] = (int) (this.x + Math.cos(this.angle)*(error + this.size/5));
-        output[1] = (int) (this.y + Math.sin(this.angle)*(error + this.size/5));
+        double error = this.size*Math.sqrt(3)/6  + 35;
+        output[0] = (int) (this.x + Math.cos(this.angle)*(error));
+        output[1] = (int) (this.y + Math.sin(this.angle)*(error));
         return output;
     }
 

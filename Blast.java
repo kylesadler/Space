@@ -1,7 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Color;
+import java.io.*;
 
-public class Blast{
+public class Blast implements Serializable{
     
     private double x;
     private double y;

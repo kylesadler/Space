@@ -21,6 +21,8 @@ public class EnemyShip extends Spaceship{
         double xDist = p.getX()-this.getX();
         double yDist = p.getY()-this.getY();
         int distance = (int) Math.sqrt(xDist*xDist + yDist*yDist);
+        
+
 
         if(distance >= ENEMY_ALERT_RADIUS){return 0;}
 

@@ -1,8 +1,9 @@
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.io.*;
 
-public class Block{
+public class Block implements Serializable{
 
     private Color color;
     private ArrayList<int[]> sections;

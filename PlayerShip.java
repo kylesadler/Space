@@ -6,7 +6,7 @@ import java.awt.Font;
 public class PlayerShip extends Spaceship{
 
     private static double PLAYER_MAX_HEALTH = 100;
-    private static double PLAYER_MAX_SPEED = 16;
+    private static double PLAYER_MAX_SPEED = 30;
     private static Color PLAYER_COLOR = Color.red;
 
     public PlayerShip(double x_in, double y_in, double angle_in){

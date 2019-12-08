@@ -50,7 +50,7 @@ public class View extends JFrame implements ActionListener, Serializable {
          controller = c;
 
       }
-    public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().compareTo("Pause") == 0){
             controller.pause();
         }else if(e.getActionCommand().compareTo("Save") == 0){
@@ -63,7 +63,7 @@ public class View extends JFrame implements ActionListener, Serializable {
             controller.instructions();
         }
 
-         System.out.println("Menu clicked: "+e.getActionCommand());
+        //  System.out.println("Menu clicked: "+e.getActionCommand());
       }
    }
 

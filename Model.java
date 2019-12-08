@@ -6,12 +6,12 @@ October 18th, 2019
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-class Model{
+class Model implements Serializable{
 
     // private instance variables
     private PlayerShip player;
@@ -32,15 +32,18 @@ class Model{
     private int offsetX;
     private int offsetY;
 
+    private EnemySpaceshipThread esht;
+
+
 
     // constructor
-    Model(int w, int h) throws IOException {
+    Model(int w, int h) {
         this.height = h;
         this.width = w;
         // this.offsetX = 0;
         // this.offsetY = 0;
 
-        this.enemies = new ArrayList<EnemyShip>();
+        // this.enemies = new ArrayList<EnemyShip>();
         this.blasts = new ArrayList<Blast>();
         this.blocks = new ArrayList<Block>();
         this.player = null;
@@ -50,9 +53,13 @@ class Model{
         this.showPauseMenu = false;
         this.gameIsOver = false;
         this.gameIsWon = false;
+        
     }
 
-    
+    public boolean isGameWon(){return this.gameIsWon;}
+    public boolean isGameOver(){return this.gameIsOver;}
+    public boolean isGamePaused(){return this.isPaused;}
+
     // public methods
     public void updateState(){
         if(this.isPaused){return;}
@@ -70,7 +77,7 @@ class Model{
             if(this.gameIsWon){
                 this.__drawGameWon(g);
             } else {
-                this.__drawGameOver(g, this.width/2-50, this.height/2);
+                this.__drawGameOver(g);
             }
         }
         
@@ -87,49 +94,40 @@ class Model{
 
         this.__drawOptions(g, 10, this.height-100);
         if(this.showInstructions){
-            this.__drawInstructions(g,100,this.height-100);
+            this.__drawInstructions(g,250,this.height-500);
         }
         if(this.showPauseMenu){
-            this.__drawPauseMenu(g,this.width/2-100, this.height/2-75);
+            this.__drawPauseMenu(g,600, this.height-500);
         }
         
     }
 
 
     public void setAngle(int x, int y){
-        if(this.isPaused){
-            return;
-        }
+      if(!this.isPaused){
         player.setAngle(x+this.offsetX, y+this.offsetY);
-        }
+      }
+    }
     public void firePrimary(){
-        if(this.isPaused){return;}
-        __primaryShot(player);
-        }
+        if(!this.isPaused){
+        __primaryShot(player);}
+    }
     public void fireSecondary(){
-        if(this.isPaused){return;}
-        __secondaryShot(player);
-        }
+        if(!this.isPaused){
+        __secondaryShot(player);}
+    }
 
     public void moveRight(){
-        //if(player.canMoveRight(this.blocks)){
-            player.moveRight();
-        //}
+      player.moveRight();
     }
     public void moveLeft(){
-        //if(player.canMoveLeft(this.blocks)){
-            player.moveLeft();
-        //}
+      player.moveLeft();
     }
     public void moveUp(){
-        //if(player.canMoveUp(this.blocks)){
-            player.moveUp();
-        //}
+      player.moveUp();
     }
     public void moveDown(){
-        //if(player.canMoveDown(this.blocks)){
-            player.moveDown();
-        //}
+      player.moveDown();
     }
 
     public void powerup1(){
@@ -140,11 +138,10 @@ class Model{
     public void pause(){
         this.isPaused = true;
         this.showPauseMenu = true;
-        // this.showInstructions = true;
-        }
+    }
     public void instructions(){
         this.showInstructions = !this.showInstructions;
-        }
+    }
     public void resume(){
         this.isPaused = false;
         this.showPauseMenu = false;
@@ -156,14 +153,17 @@ class Model{
         this.player = p;
         this.player.setX(this.width/2);
         this.player.setY(this.height/2);
-        // this.offsetX = this.player.getX();
-        // this.offsetY = this.height;
+        this.esht = new EnemySpaceshipThread(this.player);
+        this.enemies = esht.getEnemies();
+        Thread t =new Thread(this.esht);
+        t.start();
     }
     protected void addBlast(Blast b){
         this.blasts.add(b);
     }
     protected void addEnemy(EnemyShip e){
-        this.enemies.add(e);
+        // this.enemies.add(e);
+        this.esht.add(e);
     }
 
     protected void addBlock(Block e){
@@ -177,49 +177,41 @@ class Model{
         this.isPaused = true;
     }
     private void __drawOptions(Graphics g, int x, int y){
-        int spacing = 20;
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("P to pause", x,y);
-        g.drawString("I for instructions", x,y+spacing);
+        String[] words = {"P to pause", "I for instructions"};
+        __drawWords(g, words, x, y);
     }
     private void __drawInstructions(Graphics g, int x, int y){
-        int spacing = 20;
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Instructions:", x,y);
-        g.drawString("P to pause", x,y+spacing);
-        g.drawString("WASD to move", x,y+spacing*2);
-        g.drawString("Left click to fire lasers", x,y+spacing*3);
-        g.drawString("Right click to fire plasma bombs", x,y+spacing*4);
-        g.drawString("Q to activate powerup1", x,y+spacing*5);
-        g.drawString("E to activate powerup2", x,y+spacing*6);
+        String[] instr = {"Eliminate all enemy ships", "WASD to move", "Left click to fire lasers",
+        "Right click to fire plasma bombs", "Pause to pause game", 
+        "Save to save current game", "Load to load a game", "Exit to quit", "Instructions for instructions"};
+        __drawWords(g, instr, x, y);
+    }
+
+    private void __drawWords(Graphics g, String[] words, int x, int y){
+      int spacing = 20;
+      g.setColor(Color.BLACK);
+      g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+      for (int i = 0; i<words.length; i++){
+        String s = words[i];
+        g.drawString(s, x, y+ (i*spacing));
+      }
     }
     private void __drawPauseMenu(Graphics g, int x, int y){
-        int spacing = 20;
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Game paused:", x,y);
-        g.drawString("Q to quit to main menu", x,y+spacing);
-        g.drawString("I for instructions", x,y+spacing*2);
-        g.drawString("Esc to resume game", x,y+spacing*3);
+        String[] words = {"Game paused:", "Q for main menu", "Esc to resume game"};
+        __drawWords(g, words, x, y);
+        
     }
-    private void __drawGameOver(Graphics g, int x, int y){
-        int spacing = 20;
-        g.setColor(Color.red);
-        g.fillRect(0,0, this.width, this.height);
-        g.setColor(Color.black);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Game OVER", x,y);
-        g.drawString("Q for main menu", x,y+spacing);
-        g.drawString("R to play again", x,y+spacing*2);
+    private void __drawGameOver(Graphics g){
+       g.setColor(Color.red);
+       g.fillRect(0,0,this.width, this.height);
+       String[] words = {"Game OVER", "Q to quit to main menu", "R to play again"};
+        __drawWords(g, words, width/2-75, height/2+50);
     }
     private void __drawGameWon(Graphics g){
         g.setColor(Color.green);
         g.fillRect(0,0,this.width, this.height);
-        g.setColor(Color.black);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Level COMPLETE", width/2-75,height/2-150);
+        String[] words = {"Level COMPLETE", "Space for next level"};
+        __drawWords(g, words, width/2-75, height/2-250);
     }
     private void __updateBlasts(){
         for(Blast b : blasts){
@@ -228,11 +220,11 @@ class Model{
         __removeOutOfBoundsBlasts();
     }
     private void __secondaryShot(Spaceship s){
-        int[] coords = s.getFiringCoords();
+        int[] coords = s.getFiringCoords(2);
         blasts.add(new SecondaryBlast(coords[0],coords[1],s.getAngle()));
     }
     private void __primaryShot(Spaceship s){
-        int[] coords = s.getFiringCoords();
+        int[] coords = s.getFiringCoords(1);
         blasts.add(new PrimaryBlast(coords[0],coords[1],s.getAngle()));
     }
     private void __updateEnemyShots(){
@@ -249,6 +241,8 @@ class Model{
             if(enemies.size() == 0){
                 this.gameIsWon = true;
                 this.gameIsOver = true;
+                // this.showInstructions = false;
+                // this.showPauseMenu = false;
             }
         }
     }
@@ -299,7 +293,7 @@ class Model{
     private void __updateEnemies(){
         
         __updateEnemyShots();
-        
+        synchronized(enemies){
         for(EnemyShip e : enemies){
             int shot = e.updateState(player);
             if(shot == 1){
@@ -307,6 +301,7 @@ class Model{
             } else if(shot == 2){
                 __secondaryShot(e);
             }            
+        }
         }
         
     }

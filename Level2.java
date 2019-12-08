@@ -2,9 +2,9 @@
 import java.io.IOException;
 import java.awt.Color;
 
-public class Level1 extends Model {
+public class Level2 extends Model {
 
-    public Level1(int h, int w) {
+    public Level2(int h, int w) {
         super(h,w);
 		    super.addPlayer(new PlayerShip(100, 100, 10));
 
@@ -29,7 +29,7 @@ public class Level1 extends Model {
         int num_enemies = 4;
         // enemies
         for (int i=0;i<num_enemies;i++){
-          int x = (int) (Math.random()*650+1250);
+          int x = (int) (Math.random()*1000+750);
           int y = (int) (Math.random()*1000-250);
           super.addEnemy(new EnemyShip(x, y, 10));
         }
