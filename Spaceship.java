@@ -107,7 +107,7 @@ public class Spaceship implements Serializable{
 
         //g.setColor(Color.RED);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 13));
-        g.drawString(this.health+"", (int)newX, (int)(newY - 30));
+        g.drawString((int)this.health+"", (int)newX, (int)(newY - 30));
         
 	}
 

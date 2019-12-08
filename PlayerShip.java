@@ -6,6 +6,7 @@ December 9th, 2019
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 
 
 public class PlayerShip extends Spaceship{
@@ -22,6 +23,13 @@ public class PlayerShip extends Spaceship{
         super.draw(g, offsetX, offsetY);
         g.setColor(Color.BLACK);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("Health: "+this.getHealth(), 20,20);
+        g.drawString("Health: "+(int)this.getHealth(), 20,20);
+    }
+
+    public void updateState(ArrayList<Block> blks, boolean player) {
+        super.updateState(blks, player);
+        if(this.getHealth() < PLAYER_MAX_HEALTH){
+          this.setHealth(this.getHealth()+0.07);
+        }
     }
 }

@@ -34,6 +34,8 @@ class Model implements Serializable{
     private int offsetX;
     private int offsetY;
 
+    private boolean isLastLevel;
+
     private EnemySpaceshipThread esht;
 
 
@@ -45,7 +47,6 @@ class Model implements Serializable{
         // this.offsetX = 0;
         // this.offsetY = 0;
 
-        // this.enemies = new ArrayList<EnemyShip>();
         this.blasts = new ArrayList<Blast>();
         this.blocks = new ArrayList<Block>();
         this.player = null;
@@ -56,6 +57,7 @@ class Model implements Serializable{
         this.gameIsOver = false;
         this.gameIsWon = false;
         this.isMenu = isMenu_;
+        this.isLastLevel = false;
     }
 
     public boolean isGameWon(){return this.gameIsWon;}
@@ -72,27 +74,36 @@ class Model implements Serializable{
         __updateEnemies();
         }
     
+    public void lastLevel(){
+      this.isLastLevel = true;
+    }
     public void updateImage(Graphics g) {
         
+        if(isLastLevel){
+          this.__drawLastLevel(g);
+        }
         
         if(this.gameIsOver && !this.isMenu){
-            if(this.gameIsWon){
-                this.__drawGameWon(g);
-            } else {
-                this.__drawGameOver(g);
-            }
+          if(this.gameIsWon){
+            this.__drawGameWon(g);
+          } else {
+            this.__drawGameOver(g);
+          }
         }
         
         for(Block b : blocks){
             b.updateImage(g, this.offsetX, this.offsetY);
         }
         player.draw(g, this.offsetX, this.offsetY);
+        synchronized(blasts){
         for(Blast b : blasts){
             b.updateImage(g, this.offsetX, this.offsetY);
         }
+        }
+        synchronized(enemies){
         for(EnemyShip e : enemies){
             e.draw(g, this.offsetX, this.offsetY);
-        }
+        }}
 
         this.__drawOptions(g, 10, this.height-100);
         if(this.showInstructions){
@@ -103,6 +114,9 @@ class Model implements Serializable{
         }
         if(this.menu){
             this.__drawMenu(g);
+        }
+        if(!this.isMenu){
+            __drawEnemiesLeft(g);
         }
         
     }
@@ -158,8 +172,9 @@ class Model implements Serializable{
         this.player = p;
         this.player.setX(this.width/2);
         this.player.setY(this.height/2);
-        this.esht = new EnemySpaceshipThread(this.player);
+        this.esht = new EnemySpaceshipThread(this.player, this.blasts, this.player);
         this.enemies = esht.getEnemies();
+        
         Thread t =new Thread(this.esht);
         t.start();
     }
@@ -167,7 +182,6 @@ class Model implements Serializable{
         this.blasts.add(b);
     }
     protected void addEnemy(EnemyShip e){
-        // this.enemies.add(e);
         this.esht.add(e);
     }
 
@@ -185,6 +199,16 @@ class Model implements Serializable{
     }
 
     // private methods
+    private void __drawEnemiesLeft(Graphics g){
+      g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+      g.drawString("Enemies: "+this.enemies.size(), 500, 20);
+    }
+
+    private void __drawLastLevel(Graphics g){
+      g.setColor(Color.black);
+      g.fillRect(0,0,this.width, this.height);
+       
+    }
     private void __gameOver(){
         this.gameIsOver = true;
         this.isPaused = true;
@@ -241,23 +265,29 @@ class Model implements Serializable{
         blasts.add(new PrimaryBlast(coords[0],coords[1],s.getAngle()));
     }
     private void __updateEnemyShots(){
-        synchronized(this.enemies){
-            Iterator iter = this.enemies.iterator();
-
-            while (iter.hasNext()) {
-                EnemyShip e = (EnemyShip) iter.next();
-                __updateShipShots(e);
-                if(e.getHealth() < 0){
-                    iter.remove();
-                }
-            }
-            if(enemies.size() == 0){
-                this.gameIsWon = true;
-                this.gameIsOver = true;
-                // this.showInstructions = false;
-                // this.showPauseMenu = false;
-            }
+        // this.esht.updateEnemyShots();
+        if(enemies.size() == 0){
+          this.gameIsWon = true;
+          this.gameIsOver = true;
         }
+        
+        // synchronized(this.enemies){
+        //     Iterator iter = this.enemies.iterator();
+
+        //     while (iter.hasNext()) {
+        //         EnemyShip e = (EnemyShip) iter.next();
+        //         __updateShipShots(e);
+        //         if(e.getHealth() < 0){
+        //             iter.remove();
+        //         }
+        //     }
+        //     if(enemies.size() == 0){
+        //         this.gameIsWon = true;
+        //         this.gameIsOver = true;
+        //         // this.showInstructions = false;
+        //         // this.showPauseMenu = false;
+        //     }
+        // }
     }
     private void __updatePlayerShots(){
 

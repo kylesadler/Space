@@ -23,12 +23,14 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
     private int windowWidth = 1000;
     private int windowHeight = 700;
     private int currentLevel = 0;
+    private int w;
 
 
     Controller() throws IOException, Exception {
 
         model = (Model) (new Menu(windowWidth, windowHeight));
         // model = (Model) (new Level1(windowWidth, windowHeight));
+        w = windowWidth;
         view = new View(this, windowWidth, windowHeight);
         new Timer(50, view).start();
     }
@@ -36,6 +38,9 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
     public void update(Graphics g) {
         model.updateImage(g);
         model.updateState();
+        if(this.currentLevel != 0){
+          g.drawString("Level: "+this.currentLevel, this.w - 100,20);
+        }
     }
 
     public void mousePressed(MouseEvent e) {
@@ -67,13 +72,18 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
         } else if (e.getKeyCode() == 32) { // space to coninue
             if(this.model.isGameWon()){
               this.currentLevel++;
+              this.currentLevel%=4;
               changeLevel(this.currentLevel);
             }
-        } else if (e.getKeyChar() == 'q') { // space
+        } else if (e.getKeyChar() == 'q') {
             if(this.model.isGameOver() || this.model.isGamePaused()){
               this.currentLevel = 0;
               changeLevel(this.currentLevel);
             }
+        } else if (e.getKeyChar() == '1') {
+          this.currentLevel++;
+          this.currentLevel%=4;
+          changeLevel(this.currentLevel);
         }
         
        
@@ -91,6 +101,7 @@ class Controller implements MouseListener, KeyListener, MouseMotionListener, Ser
           Controller c = (Controller) inStream.readObject();
           this.model = c.model;
           this.view = c.view;
+          this.currentLevel = c.currentLevel;
           
       } catch (Exception e) {
           e.printStackTrace();
