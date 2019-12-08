@@ -24,7 +24,7 @@ public class EnemySpaceshipThread implements Runnable, Serializable{
 
     public void run(){
         while(true){
-          try {updateEnemies(); Thread.sleep(200);} catch (Exception e) {}
+          try {updateEnemies(); Thread.sleep(10);} catch (Exception e) {}
         }
     }
 

@@ -12,7 +12,7 @@ public class EnemyShip extends Spaceship{
     private static double ENEMY_MAX_HEALTH = 75;
     private static double ENEMY_MAX_SPEED = 8;
     private static Color ENEMY_COLOR = Color.black;
-    private static int ENEMY_FIRE_RATE = 25; // lower is faster
+    private static int ENEMY_FIRE_RATE = 100; // lower is faster
     private static int ENEMY_ALERT_RADIUS = 500;
     private Random random;
 
@@ -20,6 +20,11 @@ public class EnemyShip extends Spaceship{
         super(x_in, y_in, angle_in, ENEMY_MAX_HEALTH, ENEMY_MAX_SPEED, ENEMY_COLOR);
         this.random = new Random();
     }
+
+    // public boolean isShot(Blast b){
+
+    //     return Math.abs(b.getX() - this.getX()) < 3*b.getSize() && Math.abs(b.getY() - this.getY()) < 3*b.getSize();
+    // }
     
     public int updateState(PlayerShip p) { // 1 if firing primary, 2 secondary, 0 none
         super.updateState(new ArrayList<Block>(), false);
